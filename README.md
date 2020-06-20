@@ -1,4 +1,4 @@
-[![Galaxy](https://img.shields.io/badge/galaxy-nkakouros.systemd-notifier-blue.svg)](https://galaxy.ansible.com/nkakouros/systemd_notifier/)
+[![Galaxy](https://img.shields.io/badge/galaxy-nkakouros.systemd_notifier-blue.svg)](https://galaxy.ansible.com/nkakouros/systemd_notifier/)
 
 ansible-role-systemd-notifier
 =========
