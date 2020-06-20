@@ -1,0 +1,28 @@
+---
+
+systemd_notifier_enabled: true
+# If set to no the role is disabled and not loaded
+
+systemd_notifier_monitored_services: []
+# A list of systemd service names that will use the mailer to notify when they
+# stop unexpectedly
+
+systemd_notifier_restart_services: false
+# Set to true to also restart the monitored services on failure.
+
+systemd_notifier_email: false
+# Set to true to send email notifications to `systemd_notifier_email_address`.
+
+systemd_notifier_email_address: ''
+# The email address to send email notifications to if email notifications are
+# enabled.
+
+systemd_notifier_slack: true
+# Set to true to send notifications to a slack channel.
+
+systemd_notifier_slack_url: ''
+# The Slack API endpoint where to send notifications to.
+
+systemd_notifier_custom_notifier: ''
+# Use this variable to add custom bash script lines that implement your own
+# notifier, if the implemented Slack or email ones do not cover your needs.

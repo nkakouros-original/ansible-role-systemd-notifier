@@ -1,0 +1,4 @@
+---
+
+- import_tasks: systemd-notifier.yml
+  when: systemd_notifier_enabled | bool

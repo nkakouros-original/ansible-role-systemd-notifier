@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+
+# Don't do anything if the service intentionally stopped successfully.
+if [[ "$SERVICE_RESULT" == "success" ]]; then
+  exit
+fi
+
+# EMAIL
+# Taken from https://serverfault.com/questions/876233/
+
+if [[ "true" == {{ systemd_notifier_email | ternary('true', 'false') }} ]]; then
+# sendmail can be provided by any smtp agent, e.g. ssmtp, msmtp, etc
+/usr/bin/sendmail -t <<ERRMAIL
+To: {{ systemd_notifier_email_address }}
+From: systemd <root@$HOSTNAME>
+Subject: $1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+
+$(journalctl -u "$1" -n 30)
+ERRMAIL
+fi
+
+# SLACK
+# Taken from https://raw.githubusercontent.com/sulhome/bash-slack/
+
+if ! type curl &>/dev/null; then
+  echo 'curl must be installed'
+  exit 1
+fi
+
+if [[ "true" == {{ systemd_notifier_slack | ternary('true', 'false') }} ]]; then
+read -d '' payLoad << EOF
+{
+  "username": "$(hostname)",
+  "icon_emoji": ":warning:",
+  "attachments": [{
+    "fallback": "${msgTitle}",
+    "color": "#bb0000",
+    "title": "${msgTitle}",
+    "fields": [{
+      "title": "$1",
+      "value": "$(journalctl -u "$1" -n 30)",
+      "short": false
+    }]
+  }]
+}
+EOF
+
+statusCode="$(curl \
+  --write-out %{http_code} \
+  --silent \
+  --output /dev/null \
+  -X POST \
+  -H 'Content-type: application/json' \
+  --data "${payLoad}" \
+  {{ systemd_notifier_slack_url }}
+)"
+
+echo "${statusCode}"
+fi
+
+# vi: ft=sh.jinja2

@@ -1,0 +1,7 @@
+---
+
+- name: Install notifier script
+  template:
+    src: systemd-notifier.j2
+    dest: /usr/local/bin/systemd-notifier
+    mode: 0o755

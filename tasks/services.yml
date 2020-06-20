@@ -1,0 +1,45 @@
+---
+
+- name: Create override directory for monitored systemd services
+  file:
+    path: "/etc/systemd/system/{{ service }}.service.d"
+    state: directory
+  loop: "{{ systemd_notifier_monitored_services }}"
+  loop_control:
+    loop_var: service
+
+- name: Install overrides for monitored systemd services
+  copy:
+    content: |
+      [Service]
+      ExecStopPost=/usr/local/bin/systemd-notifier %n
+    dest: "/etc/systemd/system/{{ service }}.service.d/override.conf"
+  loop: "{{ systemd_notifier_monitored_services }}"
+  loop_control:
+    loop_var: service
+  when: not systemd_notifier_restart_services | bool
+
+- name: Install overrides for monitored systemd services
+  copy:
+    content: |
+      [Service]
+      ExecStopPost=/usr/local/bin/systemd-notifier %n
+      # ExecStopPost runs every time the service is stopped either normally or
+      # unexpectedly. `OnFailure` would run only when all restart retries have
+      # failed to restart the service.
+
+      Restart=on-failure
+    dest: "/etc/systemd/system/{{ service }}.service.d/override.conf"
+  loop: "{{ systemd_notifier_monitored_services }}"
+  loop_control:
+    loop_var: service
+  when: systemd_notifier_restart_services | bool
+
+- name: Reload monitored systemd services
+  systemd:
+    name: "{{ service }}"
+    state: restarted
+    daemon_reload: true
+  loop: "{{ systemd_notifier_monitored_services }}"
+  loop_control:
+    loop_var: service
