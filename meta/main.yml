@@ -1,6 +1,7 @@
 ---
 
 galaxy_info:
+  role_name: systemd-notifier
   author: Nikolaos Kakouros
   description: Installs a systemd failure notifier
   license: GPLv3
