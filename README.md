@@ -1,4 +1,3 @@
-[![Build Status](https://travis-ci.com/nkakouros-original/ansible-role-systemd-notifier.svg?branch=master)](https://travis-ci.com/nkakouros-original/ansible-role-systemd-notifier)
 [![Galaxy](https://img.shields.io/badge/galaxy-nkakouros.systemd-notifier-blue.svg)](https://galaxy.ansible.com/nkakouros/systemd_notifier/)
 
 ansible-role-systemd-notifier
