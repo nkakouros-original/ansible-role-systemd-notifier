@@ -17,7 +17,7 @@ systemd_notifier_email_address: ''
 # The email address to send email notifications to if email notifications are
 # enabled.
 
-systemd_notifier_slack: true
+systemd_notifier_slack: false
 # Set to true to send notifications to a slack channel.
 
 systemd_notifier_slack_url: ''
